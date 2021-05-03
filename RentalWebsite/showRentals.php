@@ -7,33 +7,37 @@
 
 <body>
 <center>
-        <?php
-        include 'rentalIndex.php';
+    <?php
+    include 'rentalIndex.php';
 
-        $username = "root";
-        $password = "";
-        $database = "HW2";
-        $mysqli = new mysqli("localhost", $username, $password, $database);
+    $username = "root";
+    $password = "";
+    $database = "HW2";
+    $mysqli = new mysqli("localhost", $username, $password, $database);
 
-        $startDate = $_REQUEST['startDate'];
-        $rentalPeriod = $_REQUEST['period'];
-        $dayOrWeek = $_POST['dayOrWeek'];
-        $periodConvert = strval( $rentalPeriod);
-        $tempReturnDate = '2020-05-05';
+    $startDate = $_REQUEST['startDate'];
+    $SDate = date_create($startDate);
+    $rentalPeriod = $_REQUEST['period'];
+    $dayOrWeek = $_POST['dayOrWeek'];
+    $periodConvert = strval($rentalPeriod);
+    $stringPeriod = $periodConvert . ' ' . $dayOrWeek;
 
-        //days
-        if($dayOrWeek == 'days') {
+    $tempReturnDate = date_add($SDate, date_interval_create_from_date_string($stringPeriod));
+    $ReturnDate = date_format( $tempReturnDate, "Y-m-d");
+    echo "StartDate: " . $startDate . "<br>";
+    echo "ReturnDate: " . $ReturnDate;
 
-            // $calculatedDayReturn = date('Y-m-d', strtotime($startDate. + $periodConvert));
-            //  echo($calculatedDayReturn);
+    // PANDA VERSION
 
-            $query = "SELECT C.VehicleID, C.Model, C.Year, C.CarType 
+
+
+    $query = "SELECT C.VehicleID, C.Model, C.Year, C.Car_Type 
 FROM car AS C 
 LEFT OUTER JOIN rental R ON C.VehicleID = R.VehicleID
-WHERE NOT((date '$startDate' <= R.ActualReturnDate) AND (R.StartDate <= date '$tempReturnDate')) OR (R.StartDate IS NULL)";
+WHERE NOT((date '$startDate' <= R.ActualReturnDate) AND (R.StartDate <= date '$ReturnDate')) OR (R.StartDate IS NULL)";
 
-            echo '<h3>Available Daily Cars to Rent</h3>';
-            echo '<table cellspacing="2" cellpadding="2" > 
+    echo '<h3>Available Cars to Rent</h3>';
+    echo '<table cellspacing="2" cellpadding="2" > 
       <tr> 
           <td> <b><font face="Arial">VehicleID</font></b> </td> 
           <td> <b><font face="Arial">Model</font></b> </td> 
@@ -41,104 +45,26 @@ WHERE NOT((date '$startDate' <= R.ActualReturnDate) AND (R.StartDate <= date '$t
           <td> <b><font face="Arial">CarType</font></b> </td> 
       </tr>';
 
-            if ($result = $mysqli->query($query)) {
-                while ($row = $result->fetch_assoc()) {
-                    $field1name = $row["VehicleID"];
-                    $field2name = $row["Model"];
-                    $field3name = $row["Year"];
-                    $field4name = $row["CarType"];
+    if ($result = $mysqli->query($query)) {
+        while ($row = $result->fetch_assoc()) {
+            $field1name = $row["VehicleID"];
+            $field2name = $row["Model"];
+            $field3name = $row["Year"];
+            $field4name = $row["Car_Type"];
 
-                    echo '<tr> 
+            echo '<tr> 
                   <td>' . $field1name . '</td> 
                   <td>' . $field2name . '</td> 
                   <td>' . $field3name . '</td> 
                   <td>' . $field4name . '</td> 
               </tr>';
-                }
-                $result->free();
-            }
-            echo'<!DOCTYPE html>
-<html lang="en">
-<center>
-<head>
-    <meta charset="UTF-8">
-    <h3>Please enter the VehicleID of the vehicle you would like to rent</h3>
-</head>
-<body>
-<form action="selectRental.php" method="POST">
-    <p>
-        <label for="Model">VehicleID:</label>
-        <input type="text" name="VID" id="VID">
-        </form>
-    <input type="submit" value="Submit">
-</form>
-    </p>
-    
-</body>
-</center>
-</html>';
         }
-        //weeks
-        if($dayOrWeek == 'weeks') {
+        $result->free();
+    }
 
-            // $calculatedWeekReturn = date('Y-m-d', strtotime($startDate. + $periodConvert));
-            //  echo($calculatedWeekReturn);
 
-            $query = "SELECT C.VehicleID, C.Model, C.Year, C.CarType 
-FROM car AS C 
-LEFT OUTER JOIN rental R ON C.VehicleID = R.VehicleID
-WHERE NOT((date '$startDate' <= R.ActualReturnDate) AND (R.StartDate <= date '$tempReturnDate')) OR (R.StartDate IS NULL)";
-
-            echo '<h3>Available Weekly Cars to Rent</h3>';
-            echo '<table cellspacing="2" cellpadding="2" > 
-      <tr> 
-          <td> <b><font face="Arial">VehicleID</font></b> </td> 
-          <td> <b><font face="Arial">Model</font></b> </td> 
-          <td> <b><font face="Arial">Year</font></b> </td> 
-          <td> <b><font face="Arial">CarType</font></b> </td> 
-      </tr>';
-
-            if ($result = $mysqli->query($query)) {
-                while ($row = $result->fetch_assoc()) {
-                    $field1name = $row["VehicleID"];
-                    $field2name = $row["Model"];
-                    $field3name = $row["Year"];
-                    $field4name = $row["CarType"];
-
-                    echo '<tr> 
-                  <td>' . $field1name . '</td> 
-                  <td>' . $field2name . '</td> 
-                  <td>' . $field3name . '</td> 
-                  <td>' . $field4name . '</td> 
-              </tr>';
-                }
-                $result->free();
-            }
-            echo'<!DOCTYPE html>
-<html lang="en">
-<center>
-<head>
-    <meta charset="UTF-8">
-    <h3>Please enter the VehicleID of the vehicle you would like to rent</h3>
-</head>
-<body>
-<form action="selectRental.php" method="POST">
-    <p>
-        <label for="Model">VehicleID:</label>
-        <input type="text" name="VID" id="VID">
-        </form>
-    <input type="submit" value="Submit">
-</form>
-    </p>
-    
-</body>
-</center>
-</html>';
-        }
-        ?>
+    ?>
 </center>
 </body>
 
 </html>
-
-
