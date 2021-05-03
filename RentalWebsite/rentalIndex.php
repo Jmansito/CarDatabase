@@ -17,17 +17,17 @@ $content = '<!DOCTYPE html>
     <p>
         <label for="Year">How long do you need the vehicle?:</label>
         <input type="number" name="period" id="period">
-    </p>
+  
     <form id="s" method="post">
-<select name="dayOrWeek">
-    <option value="days">Days</option>
-    <option value="weeks">Weeks</option>
-    </form>
+    <select name="dayOrWeek">
+    <option value="days">days</option>
+    <option value="weeks">weeks</option>
+    </select>
+    </p>
+    <br>
     <input type="submit" value="Submit">
+    </form>
 </form>
-</select>
-
-
 </body>
 </center>
 </html>';
