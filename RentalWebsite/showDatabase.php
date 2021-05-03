@@ -18,6 +18,7 @@
             <li><a href="rentalIndex.php">Rentals</a></li>
             <li><a href="showDatabase.php">Database</a></li>
             <li><a href="returnIndex.php">Returns</a></li>
+            <li><a href="ratesIndex.php">Rates</a></li>
         </ul>
     </nav>
     <div class="sidebar">

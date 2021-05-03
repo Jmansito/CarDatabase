@@ -107,13 +107,13 @@ footer
 
 #nav li
 {
-    font-size: 24px;
+    font-size: 22px;
     float: left;
     position: relative;
-    width: 13%;
+    width: 12%;
     height: 50px;
     padding: 0px;
-    margin: 10px;
+    margin: 8px;
     text-align: center;
 }
 
