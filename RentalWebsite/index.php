@@ -22,8 +22,7 @@ $content = '<img src="Images/new_BMW.png" class="imgLeft" />
 <p>
     We have options that fit your schedule, please go check out our Rental section to see our availability! 
     
-    Side note: This spot can either have more filler information or we can change the format of this page
-    to fit in less information. 
+   <b> All transaction requirements are in the navigation banner. </b>
 </p>
 <head> 
 		<style> 

@@ -11,15 +11,12 @@ $content = '<!DOCTYPE html>
 <body>
 <form action="returns.php" method="POST">
     <p>
-        <label for="Model">Customer Name (L.Firstname):</label>
-        <input type="text" name="Name" id="Name">
-    </p>
-    <p>
         <label for="Year">Phone number(000-000-0000):</label>
         <input type="number" name="Phone" id="Phone">
     </p>
     <form id="s" method="post">
 <select name="confirm">
+    <option value="no">----</option>
     <option value="yes">Yes</option>
     <option value="no">No</option>
     </form>
