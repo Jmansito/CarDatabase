@@ -6,7 +6,8 @@ $content = '<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <h1>Find a rental!</h1>
-    <h3>Testing: Currently using temp return date, and 2020-04-29 as startDate</h3>
+     <h3>All of our rentals went live on 2021-04-29! </h3>
+     <p>Hint: The start date needs to be on or after that date</p>
 </head>
 <body>
 <form action="showRentals.php" method="POST">
