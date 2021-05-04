@@ -33,7 +33,7 @@
 
 
 
-    $query = "SELECT C.VehicleID, C.Model, C.Year, C.Car_Type FROM car AS C LEFT OUTER JOIN rental R ON C.VehicleID = R.VehicleID
+    $query = "SELECT C.VehicleID, C.Model, C.Year, C.CarType FROM car AS C LEFT OUTER JOIN rental R ON C.VehicleID = R.VehicleID
               WHERE NOT(('$startDate' <= R.ActualReturnDate) AND (R.StartDate <= '$ReturnDate')) OR (R.StartDate IS NULL);";
 
     $result = mysqli_query($link, $query);

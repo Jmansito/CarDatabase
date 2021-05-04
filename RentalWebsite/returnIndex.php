@@ -12,10 +12,10 @@ $content = '<!DOCTYPE html>
 <form action="returns.php" method="POST">
     <p>
         <label for="Year">Phone number(000-000-0000):</label>
-        <input type="number" name="Phone" id="Phone">
+        <input type="text" name="Phone" id="Phone">
     </p>
     <form id="s" method="post">
-<select name="confirm">
+    <select name="confirm">
     <option value="no">----</option>
     <option value="yes">Yes</option>
     <option value="no">No</option>
