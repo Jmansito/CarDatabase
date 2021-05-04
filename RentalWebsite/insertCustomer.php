@@ -18,9 +18,19 @@
     }
 
     $IdNo = 0;
-    $Name = $_REQUEST['Name'];
-    $Phone = $_REQUEST['Phone'];
+    $Name = "";
+    $Phone = "";
 
+    if (isset($_REQUEST['Name']) OR isset($_REQUEST['Phone']))
+    {
+        $Name = $_REQUEST['Name'];
+        $Phone = $_REQUEST['Phone'];
+    }
+    else
+    {
+        $Name = "";
+        $Phone = "";
+    }
 
     $sql = "INSERT INTO customer VALUES (NULL,
 			'$Name','$Phone')";
