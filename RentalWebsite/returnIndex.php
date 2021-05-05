@@ -11,8 +11,9 @@ $content = '<!DOCTYPE html>
 <body>
 <form action="returns.php" method="POST">
     <p>
-        <label for="Year">Phone number(000-000-0000):</label>
-        <input type="text" name="Phone" id="Phone">
+        <label for="PhoneNum">Enter phone number associated with your account:</label>
+        <input type="text" name="Phone" id="Phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}">
+        <small>Format: 123-456-7890</small>
     </p>
     <form id="s" method="post">
     <select name="confirm">

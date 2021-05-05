@@ -14,14 +14,18 @@
     $password = "";
     $database = "HW2";
     $mysqli = new mysqli("localhost", $username, $password, $database);
+    $conn = mysqli_connect("localhost", "root", "", "HW2");
+
     $Phone = $_REQUEST['Phone'];
     $AmountDue = 0;
 
     //Rental table
-    //Printing full table for now until trigger is made
-    //Only print out the rental for the customer
-    $query = "SELECT * FROM rental";
 
+    $query = "select * FROM rental, customer where rental.`IdNo` = customer.`IdNo` AND customer.`Phone` = '$Phone'";
+
+    $carResult = mysqli_query($conn, $query);
+
+if($carResult) {
     echo '<table cellspacing="2" cellpadding="2"  > 
       <tr> 
           <td> <b><font face="Arial">RentalID</font></b> </td> 
@@ -35,11 +39,10 @@
           <td> <b><font face="Arial">NoOfWeeks</font></b> </td>
           <td> <b><font face="Arial">ActualReturnDate</font></b> </td>
           <td> <b><font face="Arial">AmountDue</font></b> </td>
-          <td> <b><font face="Arial">Active</font></b> </td>
-          <td> <b><font face="Arial">Scheduled</font></b> </td>
+
       </tr>';
     if ($result = $mysqli->query($query)) {
-        echo'<h3>Active Rentals</h3>';
+        echo '<h3>Active Rentals</h3>';
         while ($row = $result->fetch_assoc()) {
             $RentalField1 = $row["RentalID"];
             $RentalField2 = $row["IdNo"];
@@ -52,29 +55,28 @@
             $RentalField9 = $row["NoOfWeeks"];
             $RentalField10 = $row["ActualReturnDate"];
             $RentalField11 = $row["AmountDue"];
-            $RentalField12= $row["Active"];
-            $RentalField13 = $row["Scheduled"];
-
             echo '<tr> 
-                  <td>'.$RentalField1.'</td> 
-                  <td>'.$RentalField2.'</td> 
-                  <td>'.$RentalField3.'</td> 
-                  <td>'.$RentalField4.'</td> 
-                  <td>'.$RentalField5.'</td> 
-                  <td>'.$RentalField6.'</td> 
-                  <td>'.$RentalField7.'</td> 
-                  <td>'.$RentalField8.'</td> 
-                  <td>'.$RentalField9.'</td> 
-                  <td>'.$RentalField10.'</td> 
-                  <td>'.$RentalField11.'</td> 
-                  <td>'.$RentalField12.'</td> 
-                  <td>'.$RentalField13.'</td> 
+                  <td>' . $RentalField1 . '</td> 
+                  <td>' . $RentalField2 . '</td> 
+                  <td>' . $RentalField3 . '</td> 
+                  <td>' . $RentalField4 . '</td> 
+                  <td>' . $RentalField5 . '</td> 
+                  <td>' . $RentalField6 . '</td> 
+                  <td>' . $RentalField7 . '</td> 
+                  <td>' . $RentalField8 . '</td> 
+                  <td>' . $RentalField9 . '</td> 
+                  <td>' . $RentalField10 . '</td> 
+                  <td>' . $RentalField11 . '</td> 
               </tr>';
             $AmountDue = $RentalField11;
         }
         $result->free();
     }
-
+}
+else{
+        echo "There are no available cars!";
+    }
+/*
     echo '<tr><h3>Is this your rental?</h3>
             <select name="confirm">
             <option value="no">----</option>
@@ -100,7 +102,7 @@
         $returnRental = $_POST['submit'];
         if($returnRental == 'yes'){
             //AmountDue is set to RentalField11(amount due in table) might need to be adjusted some
-            //If everything works this way then the total can be printed, just as for
+            //If everything works this way then the total can be printed, just ask for
             //a submit on it, and run the method to clear the rental from the table
             //but of course, do whatever works best for you.
             echo'
@@ -111,10 +113,11 @@
             die();
         }
     }
+
     if($choice == 'no'){
         die();
     }
-
+*/
     ?>
 
 </center>
