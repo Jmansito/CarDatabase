@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html>
 
@@ -7,120 +10,104 @@
 
 <body>
 <center>
+
     <?php
     include 'rentalIndex.php';
+    @getInput();
+    function getInput(){
 
-    $link = mysqli_connect("localhost", "root", "", "HW2");
-
-    //$username = "root";
-    //$password = "";
-    //$database = "HW2";
-    //$mysqli = new mysqli("localhost", $username, $password, $database);
-    $phoneNumber = "";
-    $startDate = "";
-    $rentalPeriod = "";
-    $dayOrWeek = "";
-    $SelectedCar = "";
-
-    if (isset($_POST['phoneNum']) OR isset($_POST['startDate']) OR isset($_POST['rentalPeriod']) OR isset($_POST['darOrWeek']))
-    {
-        $phoneNumber = $_REQUEST['phoneNum'];
-        $startDate = $_REQUEST['startDate'];
-        $rentalPeriod = $_REQUEST['period'];
-        $dayOrWeek = $_POST['dayOrWeek'];
-    }
-    else
-    {
-        $phoneNumber = "";
-        $SelectedCar = "";
-        $rentalPeriod = "";
-        $dayOrWeek = "";
+        if (isset($_POST['phoneNum'])){
+            $_SESSION["phone"] = $_POST['phoneNum'];
+            $_SESSION["starDate"] = $_POST['startDate'];
+            $_SESSION["PeriodNo"] = $_POST['period'];
+            $_SESSION["getTerm"] = $_POST['$dayOrWeek'];
+            echo '<input type=hidden name=phoneNum value=' . $_SESSION["phone"] . '>';
+            echo '<input type=hidden name=startDate value=' . $_SESSION["starDate"] . '>';
+            echo '<input type=hidden name=period value=' . $_SESSION["PeriodNo"] . '>';
+            echo '<input type=hidden name=$dayOrWeek value=' . $_SESSION["getTerm"] . '>';
+        }
     }
 
-    $SDate = date_create($startDate);
-    $periodConvert = strval($rentalPeriod);
-    $stringPeriod = $periodConvert . ' ' . $dayOrWeek;
+    ?>
 
-    $tempReturnDate = date_add($SDate, date_interval_create_from_date_string($stringPeriod));
-    $ReturnDate = date_format( $tempReturnDate, "Y-m-d");
+    <?php
+    function getCID($PN){
 
-    // PANDA VERSION
+        $conn = mysqli_connect("localhost", "root", "", "HW2");
 
-    $cusQuery = "SELECT C.IdNo FROM customer AS C, rental AS R WHERE C.Phone = '$phoneNumber' LIMIT 1";
-    $cusResult = mysqli_query($link, $cusQuery);
-    $getField = mysqli_fetch_object($cusResult);
-    $getCID = $getField->IdNo;
-    //echo "CID: " . $getCID . "<br>";
+        $cusQuery = "SELECT C.IdNo FROM customer AS C WHERE C.Phone = '{$PN}' LIMIT 1";
+        $cusResult = mysqli_query($conn, $cusQuery);
 
-    $query = "SELECT C.VehicleID, C.Model, C.Year, C.Car_Type FROM car AS C LEFT OUTER JOIN rental R ON C.VehicleID = R.VehicleID
-              WHERE NOT(('$startDate' <= R.ActualReturnDate) AND (R.StartDate <= '$ReturnDate')) OR (R.StartDate IS NULL);";
+        $getField = mysqli_fetch_object($cusResult);
+        $getsCID = $getField->IdNo;
 
-    $result = mysqli_query($link, $query);
-    //$NumOfResult = mysqli_num_rows($result);
-    //echo $NumOfResult;
+        mysqli_close($conn);
+        $_SESSION["CID"] = (int)$getsCID;
 
-    echo '<label> Select one of the available cars:<br>';
-    echo '<form id = "lame" method="post">';
-    echo '<select name="pickCar">';
+    }
 
-    while ($row = mysqli_fetch_array($result)){
-        $VID = $row['VehicleID'];
-        $CarModel = $row['Model'];
-        echo '<option value = "' .$VID. '">' .$CarModel. '</option>';
-            }
+    ?>
 
+    <?php
+    function insertRental($CID, $carID, $term, $stDate, $days, $weeks){
 
-    echo '</select>';
-    echo '</label>';
-    echo '<input type="submit" value="Submit" />';
-    echo '</form>';
+        $conn = mysqli_connect("localhost", "root", "", "HW2");
 
+        $sql = "INSERT INTO `rental` (`RentalID`, `IdNo`, `VehicleID`, `Term`, `StartDate`, `NoOfDays`, `NoOfWeeks`, `AmountDue`, `Active`, `Scheduled`)
+                VALUES (NULL, '{$CID}', '{$carID}' , '{$term}', '{$stDate}', '{$days}', '{$weeks}', NULL, NULL, NULL)";
 
-
-    $SelectedCar = "";
-    if (isset($_POST['pickCar']))
-    {
-        $SelectedCar = $_POST['pickCar'];
-
-        if ($dayOrWeek = "days"){
-            $sql = "INSERT INTO `rental` (`RentalID`, `IdNo`, `VehicleID`, `Term`, `StartDate`, `NoOfDays`, `NoOfWeeks`, `AmountDue`, `Active`, `Scheduled`)
-                VALUES (NULL, '$getCID', '$SelectedCar' , 'Daily', '$startDate', '$rentalPeriod', '0', NULL, NULL, NULL)";
-        }
-
-        if ($dayOrWeek = "weeks"){
-            $sql = "INSERT INTO `rental` (`RentalID`, `IdNo`, `VehicleID`, `Term`, `StartDate`, `NoOfDays`, `NoOfWeeks`, `AmountDue`, `Active`, `Scheduled`)
-                VALUES (NULL, '$getCID', '$SelectedCar', 'Weekly', '$startDate', '0', '$rentalPeriod', NULL, NULL, NULL);";
-        }
-
-        if(mysqli_query($link, $sql)){
+        if(mysqli_query($conn, $sql)){
             echo "<h3>Your rental has been added successfully."
                 . " Please browse your localhost php my admin"
                 . " to view the updated data</h3>";
-
+            echo "IT WORKED: $sql. ";
 
         } else{
             echo "ERROR: Hush! Sorry $sql. "
-                . mysqli_error($link);
+                . mysqli_error($conn);
         }
 
-    }
-    else
-    {
-        $SelectedCar = "";
+        mysqli_close($conn);
     }
 
-    echo $SelectedCar;
+    ?>
+
+    <?php
+
+    getCID($_SESSION["phone"]);
 
 
+    if ($_SESSION["getTerm"] = "days"){
+        $getTerm = "Daily";
+        $noOfDays = $_SESSION["PeriodNo"];
+        $noOfWeeks = 0;
 
+    }else{
+        $getTerm = "Weekly";
+        $noOfDays = 0;
+        $noOfWeeks = $_SESSION["PeriodNo"];
+    }
 
-    mysqli_close($link);
+    //echo $_SESSION["starDate"];
+    $SDate = date_create($_SESSION["starDate"]);
+    //echo $SDate;
+    $periodConvert = strval($_SESSION["PeriodNo"]);
+    $stringPeriod = $periodConvert . ' ' . $_SESSION["getTerm"];
+    //echo $stringPeriod . "<BR>";
 
+    $tempReturnDate = date_add($SDate, date_interval_create_from_date_string($stringPeriod));
+    $_SESSION["endDate"] = date_format( $tempReturnDate, "Y-m-d");
+
+    include 'getAvailableRentals.php';
+
+    if (isset($_POST['pickCar'])){
+        $_SESSION["getCar"] = $_POST['pickCar'];
+        insertRental($_SESSION["CID"], $_SESSION["getCar"], $getTerm, $_SESSION["starDate"], $noOfDays, $noOfWeeks);
+    }
 
 
 ?>
 
 </center>
 </body>
-
 </html>
