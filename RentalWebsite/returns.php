@@ -55,9 +55,9 @@ if($carResult) {
                 $sql = "DELETE FROM rental WHERE '$IdNo' = Idno ";
 
                 if ($conn->query($sql) === TRUE) {
-                    echo "Record deleted successfully";
+                    echo "Your car has been returned and amount due charged to your card on file.";
                 } else {
-                    echo "Error deleting record: " . $conn->error;
+                    echo "Error returning car: " . $conn->error;
                 }
 
             }
