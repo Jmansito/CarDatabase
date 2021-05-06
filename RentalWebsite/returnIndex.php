@@ -1,5 +1,5 @@
 <?php
-$title = "Rental";
+$title = "Return";
 $content = '<!DOCTYPE html>
 <html lang="en">
 <center>
@@ -21,7 +21,7 @@ $content = '<!DOCTYPE html>
     <option value="yes">Yes</option>
     <option value="no">No</option>
     </form>
-    <input type="submit" value="Are you sure?">
+    <input type="submit" value="Confirm to return your car and pay amount due">
 </form>
 </select>
 
