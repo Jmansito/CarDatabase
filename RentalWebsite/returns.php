@@ -28,47 +28,40 @@
 if($carResult) {
     echo '<table cellspacing="2" cellpadding="2"  > 
       <tr> 
-          <td> <b><font face="Arial">RentalID</font></b> </td> 
-          <td> <b><font face="Arial">IdNo</font></b> </td> 
-          <td> <b><font face="Arial">VehicleID</font></b> </td> 
-          <td> <b><font face="Arial">Term</font></b> </td> 
-          <td> <b><font face="Arial">StartDate</font></b> </td>
-          <td> <b><font face="Arial">DailyTerm</font></b> </td>
-          <td> <b><font face="Arial">WeeklyTerm</font></b> </td>
-          <td> <b><font face="Arial">NoOfDays</font></b> </td>
-          <td> <b><font face="Arial">NoOfWeeks</font></b> </td>
-          <td> <b><font face="Arial">ActualReturnDate</font></b> </td>
-          <td> <b><font face="Arial">AmountDue</font></b> </td>
+           <td> <b><font face="Arial">Your Amount Due</font></b> </td> 
 
       </tr>';
     if ($result = $mysqli->query($query)) {
         echo '<h3>Active Rentals</h3>';
         while ($row = $result->fetch_assoc()) {
-            $RentalField1 = $row["RentalID"];
-            $RentalField2 = $row["IdNo"];
-            $RentalField3 = $row["VehicleID"];
-            $RentalField4 = $row["Term"];
-            $RentalField5 = $row["StartDate"];
-            $RentalField6 = $row["DailyTerm"];
-            $RentalField7 = $row["WeeklyTerm"];
-            $RentalField8 = $row["NoOfDays"];
-            $RentalField9 = $row["NoOfWeeks"];
-            $RentalField10 = $row["ActualReturnDate"];
-            $RentalField11 = $row["AmountDue"];
+            $AmountDue = $row["AmountDue"];
+            $IdNo = $row["IdNo"];
+
             echo '<tr> 
-                  <td>' . $RentalField1 . '</td> 
-                  <td>' . $RentalField2 . '</td> 
-                  <td>' . $RentalField3 . '</td> 
-                  <td>' . $RentalField4 . '</td> 
-                  <td>' . $RentalField5 . '</td> 
-                  <td>' . $RentalField6 . '</td> 
-                  <td>' . $RentalField7 . '</td> 
-                  <td>' . $RentalField8 . '</td> 
-                  <td>' . $RentalField9 . '</td> 
-                  <td>' . $RentalField10 . '</td> 
-                  <td>' . $RentalField11 . '</td> 
+                  
+                  <td><center>' . $AmountDue . '</center></td>
+                    <form id="s" method="post">
+                    <select name="confirm">
+                    <option value="no">----</option>
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                    </form>
+                    <input type="submit" value="Return?">
+                    
               </tr>';
-            $AmountDue = $RentalField11;
+            $return = $_POST['confirm'];
+            if($return == 'yes'){
+                //Delete query
+                $sql = "DELETE FROM rental WHERE '$IdNo' = Idno ";
+
+                if ($conn->query($sql) === TRUE) {
+                    echo "Record deleted successfully";
+                } else {
+                    echo "Error deleting record: " . $conn->error;
+                }
+
+            }
+
         }
         $result->free();
     }
@@ -76,48 +69,12 @@ if($carResult) {
 else{
         echo "There are no available cars!";
     }
-/*
-    echo '<tr><h3>Is this your rental?</h3>
-            <select name="confirm">
-            <option value="no">----</option>
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
-            </form>
-            <input type="submit" value="Submit">
-            </form>
-            </select>
-            </tr>';
-    $choice = $_POST['confirm'];
-    if($choice == 'yes'){
-        echo '<tr><h3>Return rental?</h3>
-            <select name="returnRental">
-            <option value="no">----</option>
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
-            </form>
-            <input type="submit" value="Return">
-            </form>
-            </select>
-            </tr>';
-        $returnRental = $_POST['submit'];
-        if($returnRental == 'yes'){
-            //AmountDue is set to RentalField11(amount due in table) might need to be adjusted some
-            //If everything works this way then the total can be printed, just ask for
-            //a submit on it, and run the method to clear the rental from the table
-            //but of course, do whatever works best for you.
-            echo'
-            <p><h3>Your total is: '.$AmountDue.' </h3></p>
-            ';
-        }
-        else{
-            die();
-        }
-    }
 
-    if($choice == 'no'){
-        die();
-    }
-*/
+//submit button to return car
+    //DELETE query to remove rental from table
+
+
+
     ?>
 
 </center>
