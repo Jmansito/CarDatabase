@@ -77,7 +77,7 @@ session_start();
     getCID($_SESSION["phone"]);
 
 
-    if ($_SESSION["getTerm"] = "days"){
+    if ($_SESSION["getTerm"] == "days"){
         $getTerm = "Daily";
         $noOfDays = $_SESSION["PeriodNo"];
         $noOfWeeks = 0;
